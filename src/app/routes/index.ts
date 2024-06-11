@@ -4,7 +4,7 @@ const router = Router();
 
 const moduleRoutes = [
   {
-    path: "/signup",
+    path: "/auth",
     route: require("./rooms").default,
   },
 ];
