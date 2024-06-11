@@ -1,8 +1,10 @@
 import { Request, Response } from "express";
+import httpStatus from "http-status";
 
 export const notFound = (req: Request, res: Response) => {
-  res.status(404).send({
-    success: false,
-    message: "Route not found",
+  res.send({
+    success: true,
+    statusCode: httpStatus.NOT_FOUND,
+    message: "Not Found",
   });
 };
