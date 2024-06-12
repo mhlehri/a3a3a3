@@ -1,7 +1,11 @@
 import { RequestHandler } from "express";
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
-import { createRoomIntoDB, getRoomByIdFromDB } from "./room.service";
+import {
+  createRoomIntoDB,
+  getAllRoomsFromDB,
+  getRoomByIdFromDB,
+} from "./room.service";
 
 export const createRoom: RequestHandler = catchAsync(async (req, res) => {
   const result = await createRoomIntoDB(req.body);
@@ -12,7 +16,16 @@ export const createRoom: RequestHandler = catchAsync(async (req, res) => {
   });
 });
 
-export const getRoom: RequestHandler = catchAsync(async (req, res) => {
+export const getAllRooms: RequestHandler = catchAsync(async (req, res) => {
+  const result = await getAllRoomsFromDB();
+
+  sendResponse(res, {
+    message: "Room retrieved successfully",
+    data: result,
+  });
+});
+
+export const getRoomById: RequestHandler = catchAsync(async (req, res) => {
   const { id } = req.params;
   const result = await getRoomByIdFromDB(id);
 

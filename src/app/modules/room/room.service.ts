@@ -7,6 +7,11 @@ export const createRoomIntoDB = async (data: TRoom) => {
   return res;
 };
 
+export const getAllRoomsFromDB = async () => {
+  const res = await Room.find();
+  return res;
+};
+
 export const getRoomByIdFromDB = async (id: string) => {
   const res = await Room.findById(id);
   return res;

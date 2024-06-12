@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { createRoom, getRoom } from "./room.controller";
+import { createRoom, getAllRooms, getRoomById } from "./room.controller";
 
 const router = Router();
 
 router.post("/", createRoom);
-router.post("/:id", getRoom);
+router.get("/", getAllRooms);
+router.get("/:id", getRoomById);
 
 export const roomRouter = router;
