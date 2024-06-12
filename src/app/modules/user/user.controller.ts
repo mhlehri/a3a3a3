@@ -4,7 +4,6 @@ import { createUserIntoDB, getUserFromDB } from "./user.service";
 
 export const createUser = catchAsync(async (req, res) => {
   const result = await createUserIntoDB(req.body);
-
   sendResponse(res, {
     message: "User registered successfully",
     data: result,
