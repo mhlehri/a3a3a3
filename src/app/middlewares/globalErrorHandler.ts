@@ -1,11 +1,17 @@
-import { Request, Response, NextFunction } from "express";
+import { ErrorRequestHandler, Response } from "express";
 import { TErrorMessages } from "../interface/error";
+import { ZodError } from "zod";
+import handleZodError from "../errors/handleZodError";
+import handleValidationError from "../errors/handleValidationError";
+import handleCastError from "../errors/handleCastError";
+import handleDuplicateError from "../errors/handleDuplicateError";
+import AppError from "../errors/AppError";
 
-const globalErrorHandler = (
-  err: Error,
-  req: Request,
-  res: Response,
-  next: NextFunction
+export const globalErrorHandler: ErrorRequestHandler = (
+  err,
+  req,
+  res,
+  next
 ) => {
   console.error(err);
 
@@ -18,12 +24,51 @@ const globalErrorHandler = (
     },
   ];
 
-  res.json({
+  if (err instanceof ZodError) {
+    const simplifiedError = handleZodError(err);
+    statusCode = simplifiedError?.statusCode;
+    message = simplifiedError?.message;
+    errorMessages = simplifiedError?.errorMessages;
+  } else if (err?.name === "ValidationError") {
+    const simplifiedError = handleValidationError(err);
+    statusCode = simplifiedError?.statusCode;
+    message = simplifiedError?.message;
+    errorMessages = simplifiedError?.errorMessages;
+  } else if (err?.name === "CastError") {
+    const simplifiedError = handleCastError(err);
+    statusCode = simplifiedError?.statusCode;
+    message = simplifiedError?.message;
+    errorMessages = simplifiedError?.errorMessages;
+  } else if (err?.code === 11000) {
+    const simplifiedError = handleDuplicateError(err);
+    statusCode = simplifiedError?.statusCode;
+    message = simplifiedError?.message;
+    console.log(message);
+    errorMessages = simplifiedError?.errorMessages;
+  } else if (err instanceof AppError) {
+    statusCode = err?.statusCode;
+    message = err.message;
+    errorMessages = [
+      {
+        path: "",
+        message: err?.message,
+      },
+    ];
+  } else if (err instanceof Error) {
+    message = err.message;
+    console.log(message, "error");
+    errorMessages = [
+      {
+        path: "",
+        message: err?.message,
+      },
+    ];
+  }
+
+  res.status(statusCode).json({
     success: false,
-    message: "",
-    errorMessages: "Internal Server Error",
+    message,
+    errorMessages,
     stack: process.env.NODE_ENV === "production" ? "🥞" : err.stack,
   });
 };
-
-export default globalErrorHandler;
