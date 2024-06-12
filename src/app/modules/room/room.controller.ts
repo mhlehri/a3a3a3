@@ -6,6 +6,8 @@ import {
   getAllRoomsFromDB,
   getRoomByIdFromDB,
 } from "./room.service";
+import AppError from "../../errors/AppError";
+import httpStatus from "http-status";
 
 export const createRoom: RequestHandler = catchAsync(async (req, res) => {
   const result = await createRoomIntoDB(req.body);
@@ -18,6 +20,14 @@ export const createRoom: RequestHandler = catchAsync(async (req, res) => {
 
 export const getAllRooms: RequestHandler = catchAsync(async (req, res) => {
   const result = await getAllRoomsFromDB();
+
+  if (!result.length)
+    sendResponse(res, {
+      success: false,
+      statusCode: httpStatus.NOT_FOUND,
+      message: "No Data Found",
+      data: result,
+    });
 
   sendResponse(res, {
     message: "Room retrieved successfully",
