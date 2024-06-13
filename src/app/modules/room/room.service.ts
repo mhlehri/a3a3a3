@@ -26,3 +26,14 @@ export const updateRoomByIdIntoDB = async (
   });
   return res;
 };
+
+export const deleteRoomByIdFormDB = async (id: string) => {
+  const res = await Room.findByIdAndUpdate(
+    { _id: id },
+    { isDeleted: true },
+    {
+      new: true,
+    }
+  );
+  return res;
+};

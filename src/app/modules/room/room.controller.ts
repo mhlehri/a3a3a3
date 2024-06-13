@@ -3,6 +3,7 @@ import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import {
   createRoomIntoDB,
+  deleteRoomByIdFormDB,
   getAllRoomsFromDB,
   getRoomByIdFromDB,
   updateRoomByIdIntoDB,
@@ -53,6 +54,16 @@ export const updateRoomById: RequestHandler = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     message: "Room updated successfully",
+    data: result,
+  });
+});
+
+export const deleteRoomById: RequestHandler = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await deleteRoomByIdFormDB(id);
+
+  sendResponse(res, {
+    message: "Room deleted successfully",
     data: result,
   });
 });
