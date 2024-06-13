@@ -16,3 +16,13 @@ export const getRoomByIdFromDB = async (id: string) => {
   const res = await Room.findById(id);
   return res;
 };
+
+export const updateRoomByIdIntoDB = async (
+  id: string,
+  data: Partial<TRoom>
+) => {
+  const res = await Room.findByIdAndUpdate({ _id: id }, data, {
+    new: true,
+  });
+  return res;
+};

@@ -5,6 +5,7 @@ import {
   createRoomIntoDB,
   getAllRoomsFromDB,
   getRoomByIdFromDB,
+  updateRoomByIdIntoDB,
 } from "./room.service";
 import AppError from "../../errors/AppError";
 import httpStatus from "http-status";
@@ -41,6 +42,17 @@ export const getRoomById: RequestHandler = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     message: "Room retrieved successfully",
+    data: result,
+  });
+});
+
+export const updateRoomById: RequestHandler = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const data = req.body;
+  const result = await updateRoomByIdIntoDB(id, data);
+
+  sendResponse(res, {
+    message: "Room updated successfully",
     data: result,
   });
 });
