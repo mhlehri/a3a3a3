@@ -12,8 +12,11 @@ export const createUser = catchAsync(async (req, res) => {
 
 export const getUser = catchAsync(async (req, res) => {
   const result = await getUserFromDB(req.body);
-  sendResponse(res, {
+  res.json({
+    success: true,
+    statusCode: 200,
     message: "User logged in successfully",
-    data: result,
+    token: result?.token,
+    data: result?.result,
   });
 });

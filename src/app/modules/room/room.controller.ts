@@ -60,6 +60,7 @@ export const updateRoomById: RequestHandler = catchAsync(async (req, res) => {
 
 export const deleteRoomById: RequestHandler = catchAsync(async (req, res) => {
   const { id } = req.params;
+
   const result = await deleteRoomByIdFormDB(id);
 
   sendResponse(res, {

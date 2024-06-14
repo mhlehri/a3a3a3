@@ -6,13 +6,14 @@ import {
   getRoomById,
   updateRoomById,
 } from "./room.controller";
+import { auth } from "../../middlewares/auth";
 
 const router = Router();
 
-router.post("/", createRoom);
+router.post("/", auth("admin"), createRoom);
 router.get("/", getAllRooms);
 router.get("/:id", getRoomById);
-router.put("/:id", updateRoomById);
+router.put("/:id", auth("admin"), updateRoomById);
 router.delete("/:id", deleteRoomById);
 
 export const roomRouter = router;

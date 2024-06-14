@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
 import { TUser } from "./user.interface";
+import bcrypt from "bcrypt";
 
 const userSchema = new Schema<TUser>(
   {
@@ -12,6 +13,30 @@ const userSchema = new Schema<TUser>(
   },
   { timestamps: true }
 );
+
+userSchema.pre("save", async function (next) {
+  console.log(this.password);
+  this.password = await bcrypt.hash(this.password, 10);
+  next();
+});
+
+userSchema.methods.toJSON = function () {
+  const obj = this.toObject();
+  delete obj.password;
+  return obj;
+};
+
+// userSchema.post("save", async function (doc, next) {
+//   // console.log(this.password);
+//   // this.password = await bcrypt.hash(this.password, 10);
+//   // delete doc?.password;
+//   next();
+// });
+
+// userSchema.post("findOne", function (doc, next) {
+
+//   next();
+// });
 
 const User = model<TUser>("User", userSchema);
 
