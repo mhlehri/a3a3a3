@@ -1,6 +1,6 @@
 export type TSlot = {
   room: string;
-  date: Date;
+  date: String;
   startTime: string;
   endTime: string;
   isBooked?: boolean;

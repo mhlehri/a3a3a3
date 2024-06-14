@@ -1,32 +1,27 @@
 import httpStatus from "http-status";
 import AppError from "../../errors/AppError";
-import Room from "../room/room.model";
 import { TSlot } from "./slot.interface";
 import Slot from "./slot.model";
 
 export const createSlotIntoDB = async (data: TSlot) => {
-  const duration = 60;
   const { room, date, startTime, endTime } = data;
+  const duration = 60;
 
-  const startTimeDuration = Number(startTime?.split(":")[0]) * duration;
-  const endTimeDuration = Number(endTime?.split(":")[0]) * duration;
+  const toMin = (time: string) => parseInt(time.split(":")[0], 10) * duration;
 
-  let currentStartTime = startTimeDuration;
-  let currentEndTime = startTimeDuration + 60;
+  const minToTime = (minutes: number) => {
+    const hours = String(Math.floor(minutes / 60)).padStart(2, "0");
+    const mins = String(minutes % 60).padStart(2, "0");
+    return `${hours}:${mins}`;
+  };
 
-  function convertMinutesToTime(minutes: number) {
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    const formattedHours = String(hours).padStart(2, "0");
-    const formattedMinutes = String(mins).padStart(2, "0");
-    return `${formattedHours}:${formattedMinutes}`;
-  }
+  const startMin = toMin(startTime);
+  const endMin = toMin(endTime);
 
-  const NumOfSlot = (endTimeDuration - startTimeDuration) / duration;
-  for (let index = 0; index < NumOfSlot; index++) {
+  for (let time = startMin; time < endMin; time += duration) {
     await Slot.create({
-      startTime: convertMinutesToTime(currentStartTime + index * duration),
-      endTime: convertMinutesToTime(currentEndTime + index * duration),
+      startTime: minToTime(time),
+      endTime: minToTime(time + duration),
       date,
       room,
     });
@@ -39,10 +34,19 @@ export const createSlotIntoDB = async (data: TSlot) => {
   return res;
 };
 
-export const getSlotsAvailabilityFromDB = async () => {
-  const query = {
+export const getSlotsAvailabilityFromDB = async (
+  query: Partial<{ date: string; roomId: string }>
+) => {
+  const queryObj: Partial<TSlot> = {
     isBooked: false,
   };
-  const res = await Slot.find(query);
+  if (query.date) {
+    queryObj.date = query.date;
+  }
+  if (query.roomId) {
+    queryObj.room = query.roomId;
+  }
+  // console.log(queryObj);
+  const res = await Slot.find(queryObj).populate("room");
   return res;
 };

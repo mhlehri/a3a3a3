@@ -1,9 +1,7 @@
-import { TRoom } from "./../room/room.interface";
+import httpStatus from "http-status";
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
-import { TSlot } from "./slot.interface";
 import { createSlotIntoDB, getSlotsAvailabilityFromDB } from "./slot.service";
-import { string } from "zod";
 
 export const createSlot = catchAsync(async (req, res) => {
   const result = await createSlotIntoDB(req.body);
@@ -16,11 +14,21 @@ export const createSlot = catchAsync(async (req, res) => {
 });
 
 export const getSlotsAvailability = catchAsync(async (req, res) => {
-  const result = await getSlotsAvailabilityFromDB();
+  const result = await getSlotsAvailabilityFromDB(req.query);
   // console.log(result);
 
+  if (!result.length) {
+    sendResponse(res, {
+      success: false,
+      statusCode: httpStatus.NOT_FOUND,
+      message: "No Data Found",
+      data: result,
+    });
+    return;
+  }
+
   sendResponse(res, {
-    message: "Slots created successfully",
+    message: "Available slots retrieved successfully",
     data: result,
   });
 });
