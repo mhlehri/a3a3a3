@@ -36,11 +36,7 @@ export const getUserFromDB = async (data: {
     id: user._id,
     role: user.role,
   };
-  const token = `Bearer ${createToken(
-    jwtPayload,
-    config.secret!,
-    config.expiresIn!
-  )}`;
+  const token = createToken(jwtPayload, config.secret!, config.expiresIn!);
 
   const result = await User.findById(user._id);
 

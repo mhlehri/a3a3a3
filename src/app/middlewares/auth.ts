@@ -5,7 +5,9 @@ import httpStatus from "http-status";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import config from "../config";
 
-export const auth = (...requiredRoles: Partial<["admin", "user"]>) =>
+type Role = "admin" | "user";
+
+export const auth = (...requiredRoles: Role[]) =>
   catchAsync((req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization?.split(" ")[1];
     // console.log(token);

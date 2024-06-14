@@ -1,9 +1,9 @@
 import { Types } from "mongoose";
 
 export type TBooking = {
-  room: Types.ObjectId;
-  slots: [Types.ObjectId];
-  user: Types.ObjectId;
+  room: String;
+  slots: [String];
+  user: String;
   totalAmount: number;
   isConfirmed: boolean;
 };

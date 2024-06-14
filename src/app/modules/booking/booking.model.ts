@@ -2,9 +2,9 @@ import { Schema, model } from "mongoose";
 import { TBooking } from "./booking.interface";
 
 const bookingSchema = new Schema<TBooking>({
-  room: { type: Schema.Types.ObjectId, ref: "Room" },
-  slots: [{ type: Schema.Types.ObjectId, ref: "Slot" }],
-  user: { type: Schema.Types.ObjectId, ref: "User" },
+  room: { type: String, ref: "Room" },
+  slots: [{ type: String, ref: "Slot" }],
+  user: { type: String, ref: "User" },
   totalAmount: Number,
   isConfirmed: Boolean,
 });
