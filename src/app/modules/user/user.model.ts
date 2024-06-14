@@ -26,18 +26,6 @@ userSchema.methods.toJSON = function () {
   return obj;
 };
 
-// userSchema.post("save", async function (doc, next) {
-//   // console.log(this.password);
-//   // this.password = await bcrypt.hash(this.password, 10);
-//   // delete doc?.password;
-//   next();
-// });
-
-// userSchema.post("findOne", function (doc, next) {
-
-//   next();
-// });
-
 const User = model<TUser>("User", userSchema);
 
 export default User;
