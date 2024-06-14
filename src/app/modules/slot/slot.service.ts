@@ -5,12 +5,6 @@ import { TSlot } from "./slot.interface";
 import Slot from "./slot.model";
 
 export const createSlotIntoDB = async (data: TSlot) => {
-  // const isExist = Room.exists({ _id: data.room });
-  // console.log(isExist, "sui");
-
-  // if (!isExist) {
-  //   throw new AppError(httpStatus.NOT_FOUND, "Room does not exist");
-  // } else {
   const duration = 60;
   const { room, date, startTime, endTime } = data;
 
@@ -39,10 +33,16 @@ export const createSlotIntoDB = async (data: TSlot) => {
   }
 
   const res = await Slot.find({ room });
-  // console.log(res);
   if (!res) {
     throw new AppError(httpStatus.NOT_FOUND, "Failed to Create Slot");
   }
   return res;
-  // }
+};
+
+export const getSlotsAvailabilityFromDB = async () => {
+  const query = {
+    isBooked: false,
+  };
+  const res = await Slot.find(query);
+  return res;
 };
