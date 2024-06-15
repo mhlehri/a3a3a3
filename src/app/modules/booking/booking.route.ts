@@ -7,11 +7,18 @@ import {
   getMyBookings,
   updateBooking,
 } from "./booking.controller";
+import validateRequest from "../../middlewares/validateRequest";
+import { bookingValidationSchema } from "./booking.validation";
 
 const router = Router();
 
 router.get("/bookings", auth("admin"), getAllBookings);
-router.post("/bookings", auth("user"), addBooking);
+router.post(
+  "/bookings",
+  auth("user"),
+  validateRequest(bookingValidationSchema),
+  addBooking
+);
 router.put("/bookings/:id", auth("admin"), updateBooking);
 router.delete("/bookings/:id", auth("admin"), deleteBooking);
 router.get("/my-bookings", auth("user"), getMyBookings);
