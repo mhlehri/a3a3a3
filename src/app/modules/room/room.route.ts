@@ -21,6 +21,6 @@ router.post(
 router.get("/", getAllRooms);
 router.get("/:id", getRoomById);
 router.put("/:id", auth("admin"), updateRoomById);
-router.delete("/:id", deleteRoomById);
+router.delete("/:id", auth("admin"), deleteRoomById);
 
 export const roomRouter = router;
