@@ -10,6 +10,7 @@ import {
 } from "./booking.service";
 import AppError from "../../errors/AppError";
 
+//? This function is used to handle the request to get all bookings
 export const getAllBookings = catchAsync(async (req, res) => {
   const result = await getAllBookingsFromDB();
   sendResponse(res, {
@@ -18,6 +19,7 @@ export const getAllBookings = catchAsync(async (req, res) => {
   });
 });
 
+//? This function is used to handle the request to add a booking
 export const addBooking = catchAsync(async (req, res) => {
   const result = await addBookingIntoDB(req.body);
   sendResponse(res, {
@@ -26,6 +28,7 @@ export const addBooking = catchAsync(async (req, res) => {
   });
 });
 
+//? This function is used to handle the request to update a booking
 export const updateBooking = catchAsync(async (req, res) => {
   //   console.log(req.params.id, "req.params.id");
   const result = await updateBookingIntoDB(req.params.id, req.body);
@@ -38,6 +41,7 @@ export const updateBooking = catchAsync(async (req, res) => {
   });
 });
 
+//? This function is used to handle the request to delete a booking
 export const deleteBooking = catchAsync(async (req, res) => {
   const result = await deleteBookingFromDB(req.params.id);
   if (!result) {
@@ -49,6 +53,7 @@ export const deleteBooking = catchAsync(async (req, res) => {
   });
 });
 
+//? This function is used to handle the request to get my bookings
 export const getMyBookings = catchAsync(async (req, res) => {
   //   console.log(req.user, "req.user.id");
   const result = await getMyBookingsFromDB(req.user.id);

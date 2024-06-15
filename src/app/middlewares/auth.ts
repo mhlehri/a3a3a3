@@ -1,16 +1,17 @@
 import { NextFunction, Request, Response } from "express";
-import catchAsync from "../utils/catchAsync";
-import AppError from "../errors/AppError";
 import httpStatus from "http-status";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import config from "../config";
+import catchAsync from "../utils/catchAsync";
 
 type Role = "admin" | "user";
 
 export const auth = (...requiredRoles: Role[]) =>
   catchAsync((req: Request, res: Response, next: NextFunction) => {
+    //? split the token from the headers
     const token = req.headers.authorization?.split(" ")[1];
     // console.log(token);
+
     if (!token)
       return res.status(httpStatus.UNAUTHORIZED).json({
         success: false,
@@ -30,6 +31,5 @@ export const auth = (...requiredRoles: Role[]) =>
     // console.log(decoded);
 
     req.user = decoded;
-
     next();
   });

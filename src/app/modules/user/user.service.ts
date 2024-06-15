@@ -7,16 +7,19 @@ import { createToken } from "../../utils/createToken";
 import { JwtPayload } from "jsonwebtoken";
 import config from "../../config";
 
+//? service for adding user
 export const createUserIntoDB = async (data: TUser) => {
   const user = await User.create(data);
   return user;
 };
 
+//? service for getting user
 export const getUserFromDB = async (data: {
   email: string;
   password: string;
 }) => {
   // console.log(data);
+  //? check if user exists
   const user = await User.findOne({
     email: data.email,
   }).select("+password");
@@ -36,6 +39,7 @@ export const getUserFromDB = async (data: {
     id: user._id,
     role: user.role,
   };
+  //? create a new token
   const token = createToken(jwtPayload, config.secret!, config.expiresIn!);
 
   const result = await User.findById(user._id);

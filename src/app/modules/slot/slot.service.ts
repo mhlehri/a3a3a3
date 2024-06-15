@@ -3,6 +3,7 @@ import AppError from "../../errors/AppError";
 import { TSlot } from "./slot.interface";
 import Slot from "./slot.model";
 
+//? service for creating slot
 export const createSlotIntoDB = async (data: TSlot) => {
   const { room, date, startTime, endTime } = data;
   const duration = 60;
@@ -34,6 +35,7 @@ export const createSlotIntoDB = async (data: TSlot) => {
   return res;
 };
 
+//? service for getting all available slots
 export const getSlotsAvailabilityFromDB = async (
   query: Partial<{ date: string; roomId: string }>
 ) => {

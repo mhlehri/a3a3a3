@@ -10,6 +10,7 @@ import {
   updateRoomByIdIntoDB,
 } from "./room.service";
 
+//? This function is used to handle the request to create a room
 export const createRoom: RequestHandler = catchAsync(async (req, res) => {
   const result = await createRoomIntoDB(req.body);
 
@@ -19,6 +20,7 @@ export const createRoom: RequestHandler = catchAsync(async (req, res) => {
   });
 });
 
+//? This function is used to handle the request to get all rooms
 export const getAllRooms: RequestHandler = catchAsync(async (req, res) => {
   const result = await getAllRoomsFromDB();
 
@@ -36,6 +38,7 @@ export const getAllRooms: RequestHandler = catchAsync(async (req, res) => {
   });
 });
 
+//? This function is used to handle the request to get a room by id
 export const getRoomById: RequestHandler = catchAsync(async (req, res) => {
   const { id } = req.params;
   const result = await getRoomByIdFromDB(id);
@@ -46,6 +49,7 @@ export const getRoomById: RequestHandler = catchAsync(async (req, res) => {
   });
 });
 
+//? This function is used to handle the request to update a room by id
 export const updateRoomById: RequestHandler = catchAsync(async (req, res) => {
   const { id } = req.params;
   const data = req.body;
@@ -57,6 +61,7 @@ export const updateRoomById: RequestHandler = catchAsync(async (req, res) => {
   });
 });
 
+//? This function is used to handle the request to delete a room by id
 export const deleteRoomById: RequestHandler = catchAsync(async (req, res) => {
   const { id } = req.params;
 

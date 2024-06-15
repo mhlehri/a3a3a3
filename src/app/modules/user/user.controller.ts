@@ -2,6 +2,7 @@ import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import { createUserIntoDB, getUserFromDB } from "./user.service";
 
+//? This function is used to handle the request to create a user
 export const createUser = catchAsync(async (req, res) => {
   const result = await createUserIntoDB(req.body);
   sendResponse(res, {
@@ -10,6 +11,7 @@ export const createUser = catchAsync(async (req, res) => {
   });
 });
 
+//? This function is used to handle the request to get a user
 export const getUser = catchAsync(async (req, res) => {
   const result = await getUserFromDB(req.body);
   res.json({

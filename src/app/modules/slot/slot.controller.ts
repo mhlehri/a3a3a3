@@ -3,6 +3,7 @@ import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import { createSlotIntoDB, getSlotsAvailabilityFromDB } from "./slot.service";
 
+//? This function is used to handle the request to create a slot
 export const createSlot = catchAsync(async (req, res) => {
   const result = await createSlotIntoDB(req.body);
   // console.log(result);
@@ -13,6 +14,7 @@ export const createSlot = catchAsync(async (req, res) => {
   });
 });
 
+//? This function is used to handle the request to get all available slots
 export const getSlotsAvailability = catchAsync(async (req, res) => {
   const result = await getSlotsAvailabilityFromDB(req.query);
   // console.log(result);
