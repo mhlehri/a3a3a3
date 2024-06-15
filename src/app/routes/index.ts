@@ -20,7 +20,7 @@ const moduleRoutes = [
     route: slotRouter,
   },
   {
-    path: "/bookings",
+    path: "/",
     route: bookingRouter,
   },
 ];

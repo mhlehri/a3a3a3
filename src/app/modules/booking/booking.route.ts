@@ -8,8 +8,8 @@ import {
 
 const router = Router();
 
-router.get("/", auth("admin"), getAllBookings);
-router.post("/", auth("user"), addBooking);
+router.get("/bookings", auth("admin"), getAllBookings);
+router.post("/bookings", auth("user"), addBooking);
 router.get("/my-bookings", auth("user"), getMyBookings);
 
 export const bookingRouter = router;

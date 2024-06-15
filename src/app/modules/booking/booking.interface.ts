@@ -1,5 +1,3 @@
-import { Types } from "mongoose";
-
 export type TBooking = {
   room: String;
   slots: [String];
