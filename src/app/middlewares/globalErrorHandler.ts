@@ -69,7 +69,9 @@ export const globalErrorHandler: ErrorRequestHandler = (
     success: false,
     message,
     errorMessages,
-    stack: process.env.NODE_ENV === "production" ? "🥞" : err.stack,
+    stack:
+      //  process.env.NODE_ENV === "production" ? "🥞" :
+      err.stack,
   });
   next();
 };

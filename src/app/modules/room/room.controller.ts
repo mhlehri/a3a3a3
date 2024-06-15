@@ -9,6 +9,7 @@ import {
   getRoomByIdFromDB,
   updateRoomByIdIntoDB,
 } from "./room.service";
+import AppError from "../../errors/AppError";
 
 //? This function is used to handle the request to create a room
 export const createRoom: RequestHandler = catchAsync(async (req, res) => {
@@ -43,6 +44,16 @@ export const getRoomById: RequestHandler = catchAsync(async (req, res) => {
   const { id } = req.params;
   const result = await getRoomByIdFromDB(id);
 
+  if (!result) {
+    sendResponse(res, {
+      success: false,
+      statusCode: httpStatus.NOT_FOUND,
+      message: "No Data Found",
+      data: [],
+    });
+    return;
+  }
+
   sendResponse(res, {
     message: "Room retrieved successfully",
     data: result,
@@ -55,6 +66,10 @@ export const updateRoomById: RequestHandler = catchAsync(async (req, res) => {
   const data = req.body;
   const result = await updateRoomByIdIntoDB(id, data);
 
+  if (!result) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Failed to update");
+  }
+
   sendResponse(res, {
     message: "Room updated successfully",
     data: result,
@@ -66,6 +81,9 @@ export const deleteRoomById: RequestHandler = catchAsync(async (req, res) => {
   const { id } = req.params;
 
   const result = await deleteRoomByIdFormDB(id);
+  if (!result) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Failed to delete");
+  }
 
   sendResponse(res, {
     message: "Room deleted successfully",
