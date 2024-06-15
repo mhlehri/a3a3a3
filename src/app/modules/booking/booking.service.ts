@@ -6,12 +6,14 @@ import Booking from "./booking.model";
 import Slot from "../slot/slot.model";
 import User from "../user/user.model";
 
-export const addBookingIntoDB = async (data: TBooking) => {
-  const isRoomExists = await Room.exists({ _id: data.room, isDeleted: false });
+export const addBookingIntoDB = async (data: Partial<TBooking>) => {
+  const isRoomExists = await Room.findOne({ _id: data.room, isDeleted: false });
 
-  for (let index = 0; index < data.slots.length; index++) {
+  const totalAmount = isRoomExists?.pricePerSlot! * data?.slots?.length!;
+
+  for (let index = 0; index < data?.slots?.length!; index++) {
     const re = await Slot.findOneAndUpdate(
-      { _id: data.slots[index], isBooked: false },
+      { _id: data.slots![index], isBooked: false },
       {
         isBooked: true,
       },
@@ -22,7 +24,7 @@ export const addBookingIntoDB = async (data: TBooking) => {
     if (!re) {
       throw new AppError(
         httpStatus.NOT_FOUND,
-        `Slot \`${data.slots[index]}\` not found or is already booked`
+        `Slot \`${data.slots![index]}\` not found or is already booked`
       );
     }
   }
@@ -34,7 +36,9 @@ export const addBookingIntoDB = async (data: TBooking) => {
   if (!isUserExists) {
     throw new AppError(httpStatus.NOT_FOUND, "User not found!");
   }
-  const res = (await Booking.create(data)).populate("room slots user");
+  const res = (await Booking.create({ totalAmount, ...data })).populate(
+    "room slots user"
+  );
 
   return res;
 };
@@ -44,6 +48,15 @@ export const updateBookingIntoDB = async (
   data: Partial<TBooking>
 ) => {
   const res = await Booking.findByIdAndUpdate(id, data, { new: true });
+  return res;
+};
+
+export const deleteBookingFromDB = async (id: string) => {
+  const res = await Booking.findByIdAndUpdate(
+    id,
+    { isDeleted: true },
+    { new: true }
+  );
   return res;
 };
 
