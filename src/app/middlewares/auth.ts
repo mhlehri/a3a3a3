@@ -12,12 +12,20 @@ export const auth = (...requiredRoles: Role[]) =>
     const token = req.headers.authorization?.split(" ")[1];
     // console.log(token);
     if (!token)
-      throw new AppError(httpStatus.UNAUTHORIZED, "You are not authorized!");
+      return res.status(httpStatus.UNAUTHORIZED).json({
+        success: false,
+        statusCode: httpStatus.UNAUTHORIZED,
+        message: "You have no access to this route",
+      });
 
     const decoded = jwt.verify(token, config.secret as string) as JwtPayload;
 
     if (requiredRoles && !requiredRoles.includes(decoded.role)) {
-      throw new AppError(httpStatus.UNAUTHORIZED, "You are not authorized!");
+      return res.status(httpStatus.UNAUTHORIZED).json({
+        success: false,
+        statusCode: httpStatus.UNAUTHORIZED,
+        message: "You have no access to this route",
+      });
     }
     // console.log(decoded);
 
