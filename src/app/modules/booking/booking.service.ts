@@ -9,9 +9,9 @@ import User from "../user/user.model";
 export const addBookingIntoDB = async (data: Partial<TBooking>) => {
   const isRoomExists = await Room.findOne({ _id: data.room, isDeleted: false });
 
-  const totalAmount = isRoomExists?.pricePerSlot! * data?.slots?.length!;
+  const totalAmount = isRoomExists!.pricePerSlot * data.slots!.length;
 
-  for (let index = 0; index < data?.slots?.length!; index++) {
+  for (let index = 0; index < data.slots!.length; index++) {
     const re = await Slot.findOneAndUpdate(
       { _id: data.slots![index], isBooked: false },
       {

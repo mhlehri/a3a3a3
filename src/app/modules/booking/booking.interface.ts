@@ -1,9 +1,9 @@
 export type TBooking = {
-  room: String;
-  slots: [String];
-  user: String;
+  room: string;
+  slots: [string];
+  user: string;
   totalAmount: number;
-  date: String;
+  date: string;
   isConfirmed: "confirmed" | "unconfirmed" | "canceled";
   isDeleted: boolean;
 };

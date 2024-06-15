@@ -1,11 +1,11 @@
-import { ErrorRequestHandler, Response } from "express";
-import { TErrorMessages } from "../interface/error";
+import { ErrorRequestHandler } from "express";
 import { ZodError } from "zod";
-import handleZodError from "../errors/handleZodError";
-import handleValidationError from "../errors/handleValidationError";
+import AppError from "../errors/AppError";
 import handleCastError from "../errors/handleCastError";
 import handleDuplicateError from "../errors/handleDuplicateError";
-import AppError from "../errors/AppError";
+import handleValidationError from "../errors/handleValidationError";
+import handleZodError from "../errors/handleZodError";
+import { TErrorMessages } from "../interface/error";
 
 export const globalErrorHandler: ErrorRequestHandler = (
   err,
@@ -43,7 +43,7 @@ export const globalErrorHandler: ErrorRequestHandler = (
     const simplifiedError = handleDuplicateError(err);
     statusCode = simplifiedError?.statusCode;
     message = simplifiedError?.message;
-    console.log(message);
+    // console.log(message);
     errorMessages = simplifiedError?.errorMessages;
   } else if (err instanceof AppError) {
     statusCode = err?.statusCode;
@@ -56,7 +56,7 @@ export const globalErrorHandler: ErrorRequestHandler = (
     ];
   } else if (err instanceof Error) {
     message = err.message;
-    console.log(message, "error");
+    // console.log(message, "error");
     errorMessages = [
       {
         path: "",
@@ -71,4 +71,5 @@ export const globalErrorHandler: ErrorRequestHandler = (
     errorMessages,
     stack: process.env.NODE_ENV === "production" ? "🥞" : err.stack,
   });
+  next();
 };
