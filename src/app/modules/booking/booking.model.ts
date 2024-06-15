@@ -6,7 +6,9 @@ const bookingSchema = new Schema<TBooking>({
   slots: [{ type: String, ref: "Slot" }],
   user: { type: String, ref: "User" },
   totalAmount: Number,
-  isConfirmed: Boolean,
+  date: { type: String },
+  isConfirmed: { type: String, default: "unconfirmed" },
+  isDeleted: { type: Boolean, default: false },
 });
 
 const Booking = model<TBooking>("Booking", bookingSchema);

@@ -2,8 +2,9 @@ import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import {
   addBookingIntoDB,
-  getMyBookingsFromDB,
   getAllBookingsFromDB,
+  getMyBookingsFromDB,
+  updateBookingIntoDB,
 } from "./booking.service";
 
 export const getAllBookings = catchAsync(async (req, res) => {
@@ -22,11 +23,20 @@ export const addBooking = catchAsync(async (req, res) => {
   });
 });
 
+export const updateBooking = catchAsync(async (req, res) => {
+  console.log(req.params.id, "req.params.id");
+  const result = await updateBookingIntoDB(req.params.id, req.body);
+  sendResponse(res, {
+    message: "Booking updated successfully",
+    data: result,
+  });
+});
+
 export const getMyBookings = catchAsync(async (req, res) => {
-  console.log(req.user, "req.user.id");
+  //   console.log(req.user, "req.user.id");
   const result = await getMyBookingsFromDB(req.user.id);
   sendResponse(res, {
-    message: "My bookings fetched successfully",
+    message: "User bookings retrieved successfully",
     data: result,
   });
 });

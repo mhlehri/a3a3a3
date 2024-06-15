@@ -3,5 +3,7 @@ export type TBooking = {
   slots: [String];
   user: String;
   totalAmount: number;
-  isConfirmed: boolean;
+  date: String;
+  isConfirmed: "confirmed" | "unconfirmed" | "canceled";
+  isDeleted: boolean;
 };

@@ -39,8 +39,16 @@ export const addBookingIntoDB = async (data: TBooking) => {
   return res;
 };
 
+export const updateBookingIntoDB = async (
+  id: string,
+  data: Partial<TBooking>
+) => {
+  const res = await Booking.findByIdAndUpdate(id, data, { new: true });
+  return res;
+};
+
 export const getMyBookingsFromDB = async (id: string) => {
-  const res = await Booking.find({ user: id }).populate("room slots user");
+  const res = await Booking.find({ user: id });
   return res;
 };
 
