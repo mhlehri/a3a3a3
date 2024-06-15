@@ -6,6 +6,16 @@ import Slot from "./slot.model";
 //? service for creating slot
 export const createSlotIntoDB = async (data: TSlot) => {
   const { room, date, startTime, endTime } = data;
+
+  const alreadyExists = await Slot.findOne({ room, date });
+
+  if (alreadyExists) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Slot Already Exists on this Date for this Room"
+    );
+  }
+
   const duration = 60;
 
   const toMin = (time: string) => parseInt(time.split(":")[0], 10) * duration;
