@@ -73,7 +73,7 @@ bun run prod
 ### Usage
 
 1. **Access the Application**
-   Open your browser and navigate to `http://localhost:3000` (or the port you specified).
+   Open your browser and navigate to `http://localhost:5000` (or the port you specified).
 
 2. **Admin Operations**
 
