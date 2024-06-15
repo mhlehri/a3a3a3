@@ -20,6 +20,8 @@ export const bookingValidationSchema = z.object({
   date: z.string({
     required_error: "Date is required",
   }),
-  isConfirmed: z.enum(["confirmed", "unconfirmed"]).default("unconfirmed"),
+  isConfirmed: z
+    .enum(["confirmed", "unconfirmed", "canceled"])
+    .default("unconfirmed"),
   isDeleted: z.boolean().default(false),
 });
