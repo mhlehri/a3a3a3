@@ -51,6 +51,7 @@ export const getSlotsAvailabilityFromDB = async (
 ) => {
   const queryObj: Partial<TSlot> = {
     isBooked: false,
+    isDeleted: false,
   };
   if (query.date) {
     queryObj.date = query.date;
@@ -60,5 +61,31 @@ export const getSlotsAvailabilityFromDB = async (
   }
   // console.log(queryObj);
   const res = await Slot.find(queryObj).populate("room");
+  return res;
+};
+//? service for getting all slots
+export const getAllSlotsFromDB = async () => {
+  // console.log(queryObj);
+  const res = await Slot.find({
+    isDeleted: false,
+  })
+    .sort({ date: -1 })
+    .populate("room");
+  return res;
+};
+
+//? service for deleting slot by id
+export const deleteSlotByIdFormDB = async (id: string) => {
+  const found = await Slot.findById(id);
+  if (found?.isDeleted)
+    throw new AppError(httpStatus.NOT_ACCEPTABLE, `Slot is already deleted`);
+
+  const res = await Slot.findByIdAndUpdate(
+    { _id: id },
+    { isDeleted: true },
+    {
+      new: true,
+    }
+  );
   return res;
 };

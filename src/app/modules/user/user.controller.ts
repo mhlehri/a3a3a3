@@ -14,11 +14,17 @@ export const createUser = catchAsync(async (req, res) => {
 //? This function is used to handle the request to get a user
 export const getUser = catchAsync(async (req, res) => {
   const result = await getUserFromDB(req.body);
-  res.json({
-    success: true,
-    statusCode: 200,
-    message: "User logged in successfully",
-    token: result?.token,
-    data: result?.result,
-  });
+  res
+    .cookie("token", result?.token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    })
+    .json({
+      success: true,
+      statusCode: 200,
+      message: "User logged in successfully",
+      token: result?.token,
+      data: result?.result,
+    });
 });

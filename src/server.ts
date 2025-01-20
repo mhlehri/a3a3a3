@@ -11,7 +11,7 @@ async function main() {
     console.log("Connected to database");
 
     server = app.listen(config.port, () => {
-      console.log(`Server running on port ${config.port}`);
+      console.log(`Server running on port http://localhost:${config.port}`);
     });
   } catch (error) {
     console.log("Error connecting to database: ", (error as Error).message);

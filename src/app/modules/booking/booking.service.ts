@@ -69,12 +69,20 @@ export const deleteBookingFromDB = async (id: string) => {
 
 //? service for getting my bookings (user bookings)
 export const getMyBookingsFromDB = async (id: string) => {
-  const res = await Booking.find({ user: id });
+  const res = await Booking.find({ user: id })
+    .sort({
+      date: -1,
+    })
+    .populate("room slots user");
+
   return res;
 };
 
 //? service for getting all bookings
 export const getAllBookingsFromDB = async () => {
-  const res = await Booking.find().populate("room slots user");
+  const res = await Booking.find({
+    isDeleted: false,
+  }).populate("room slots user");
+
   return res;
 };

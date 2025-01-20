@@ -6,6 +6,7 @@ import {
   createRoomIntoDB,
   deleteRoomByIdFormDB,
   getAllRoomsFromDB,
+  getFeaturedRoomsFromDB,
   getRoomByIdFromDB,
   updateRoomByIdIntoDB,
 } from "./room.service";
@@ -23,7 +24,47 @@ export const createRoom: RequestHandler = catchAsync(async (req, res) => {
 
 //? This function is used to handle the request to get all rooms
 export const getAllRooms: RequestHandler = catchAsync(async (req, res) => {
-  const result = await getAllRoomsFromDB();
+  const {
+    searchTerm,
+    capacityFilter,
+    priceFilter,
+    sortOrder,
+    currentPage,
+    roomsPerPage,
+  } = req.query;
+
+  const page = Number(currentPage) || 1;
+  const limit = Number(roomsPerPage) || 6;
+
+  const filters = {
+    searchTerm: searchTerm?.toString() || "",
+    capacityFilter: capacityFilter ? Number(capacityFilter) : 0,
+    priceFilter: priceFilter ? Number(priceFilter) : 0,
+    sortOrder:
+      sortOrder === "asc" || sortOrder === "desc"
+        ? (sortOrder as "asc" | "desc")
+        : undefined,
+  };
+
+  const result = await getAllRoomsFromDB(filters, page, limit);
+
+  if (!result?.rooms?.length)
+    sendResponse(res, {
+      success: false,
+      statusCode: httpStatus.NOT_FOUND,
+      message: "No Data Found",
+      data: result,
+    });
+
+  sendResponse(res, {
+    message: "Room retrieved successfully",
+    data: result,
+  });
+});
+
+//? This function is used to handle the request to get all rooms
+export const getFeaturedRooms: RequestHandler = catchAsync(async (req, res) => {
+  const result = await getFeaturedRoomsFromDB();
 
   if (!result.length)
     sendResponse(res, {

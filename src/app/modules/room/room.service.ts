@@ -10,8 +10,59 @@ export const createRoomIntoDB = async (data: TRoom) => {
 };
 
 //?   service for getting all rooms
-export const getAllRoomsFromDB = async () => {
-  const res = await Room.find();
+interface RoomFilters {
+  searchTerm?: string;
+  capacityFilter?: number;
+  priceFilter?: number;
+  sortOrder?: "asc" | "desc";
+}
+
+export const getAllRoomsFromDB = async (
+  filters: RoomFilters,
+  page: number,
+  limit: number
+): Promise<{ rooms: TRoom[]; total: number }> => {
+  const { searchTerm, capacityFilter, priceFilter, sortOrder } = filters;
+
+  // Build the query object
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const query: any = { isDeleted: false };
+
+  if (searchTerm) {
+    query.name = { $regex: searchTerm, $options: "i" }; // Case-insensitive search
+  }
+
+  if (capacityFilter) {
+    query.capacity = { $gte: capacityFilter }; // Filter by minimum capacity
+  }
+
+  if (priceFilter) {
+    query.pricePerSlot = { $lte: priceFilter }; // Filter by maximum price
+  }
+
+  // Sorting
+  const sort: { [key: string]: 1 | -1 } =
+    sortOrder === "asc"
+      ? { pricePerSlot: 1 }
+      : sortOrder === "desc"
+      ? { pricePerSlot: -1 }
+      : {};
+
+  // Pagination
+  const skip = (page - 1) * limit;
+
+  const rooms = await Room.find(query).sort(sort).skip(skip).limit(limit);
+  const total = await Room.countDocuments(query);
+  return { rooms, total };
+};
+
+//?   service for getting all rooms
+export const getFeaturedRoomsFromDB = async () => {
+  const res = await Room.find({
+    isDeleted: false,
+  })
+    .sort({ createdAt: -1 })
+    .limit(4);
   return res;
 };
 

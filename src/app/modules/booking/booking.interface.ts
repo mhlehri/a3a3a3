@@ -1,4 +1,4 @@
-export type TisConfirmed = "confirmed" | "unconfirmed" | "canceled";
+export type TisConfirmed = "confirmed" | "unconfirmed" | "rejected";
 
 export type TBooking = {
   room: string;

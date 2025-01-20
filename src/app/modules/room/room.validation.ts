@@ -29,5 +29,10 @@ export const roomValidationSchema = z.object({
       required_error: "Amenities are required",
     })
   ),
+  images: z.array(
+    z.string({
+      required_error: "images are required",
+    })
+  ),
   isDeleted: z.boolean().default(false),
 });

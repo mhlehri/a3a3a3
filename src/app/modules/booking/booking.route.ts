@@ -15,12 +15,12 @@ const router = Router();
 router.get("/bookings", auth("admin"), getAllBookings);
 router.post(
   "/bookings",
-  auth("user"),
+  auth("user", "admin"),
   validateRequest(bookingValidationSchema),
   addBooking
 );
 router.put("/bookings/:id", auth("admin"), updateBooking);
 router.delete("/bookings/:id", auth("admin"), deleteBooking);
-router.get("/my-bookings", auth("user"), getMyBookings);
+router.get("/my-bookings", auth("user", "admin"), getMyBookings);
 
 export const bookingRouter = router;

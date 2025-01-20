@@ -3,6 +3,7 @@ import {
   createRoom,
   deleteRoomById,
   getAllRooms,
+  getFeaturedRooms,
   getRoomById,
   updateRoomById,
 } from "./room.controller";
@@ -19,6 +20,7 @@ router.post(
   createRoom
 );
 router.get("/", getAllRooms);
+router.get("/featured", getFeaturedRooms);
 router.get("/:id", getRoomById);
 router.put("/:id", auth("admin"), updateRoomById);
 router.delete("/:id", auth("admin"), deleteRoomById);
